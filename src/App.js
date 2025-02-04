@@ -29,9 +29,9 @@ function App() {
       <textarea rows="6" cols="45" value={spell} onChange={handleChange} />
 
       {spell && spell !== checkSpell(spell) && (
-        <p>
+        <body>
           Did you mean: <strong>{checkSpell(spell)}</strong>?
-        </p>
+        </body>
       )}
     </div>
   );
