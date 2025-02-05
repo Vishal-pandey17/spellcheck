@@ -1,47 +1,7 @@
-// import { useState } from "react";
-
-// function App() {
-//   const [spell, setSpell] = useState("");
-
-//   const customDictionary = {
-//     teh: "the",
-//     wrok: "work",
-//     fot: "for",
-//     exampl: "example",
-//   };
-
-//   const handleChange = (e) => {
-//     setSpell(e.target.value.toLowerCase());
-//   };
-
-  
-//   const checkSpell = (text) => {
-//     return text
-//       .split(" ")
-//       .map((word) => customDictionary[word]) 
-
-
-//   };
-
-//   return (
-//     <div>
-//       <h1>Spell Check and Auto-Correction</h1>
-//       <textarea rows="6" cols="45" value={spell} onChange={handleChange}/>
-
-//       {spell && spell !== checkSpell(spell) && (
-//         <div>
-//           Did you mean: <strong>{checkSpell(spell)}</strong>?
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
-// export default App;
 import { useState } from "react";
 
 function App() {
-  const [spell, setSpell] = useState("");
+  const [inputText, setInputText] = useState("");
 
   const customDictionary = {
     teh: "the",
@@ -51,26 +11,34 @@ function App() {
   };
 
   const handleChange = (e) => {
-    setSpell(e.target.value.toLowerCase());
+    setInputText(e.target.value);
   };
 
-  // Function to check and replace misspelled words
-  const checkSpell = (text) => {
-    return text
-      .split(" ")
-      .map((word) => customDictionary[word]) // Replace if in dictionary, else keep original
-      .join(" "); 
+  const findFirstMisspelledWord = (text) => {
+    const words = text.split(" ");
+    for (const word of words) {
+      const lowerCaseWord = word.toLowerCase();
+      if (customDictionary.hasOwnProperty(lowerCaseWord)) {
+        return { original: word, corrected: customDictionary[lowerCaseWord] };
+      }
+    }
+    return null;
   };
 
-  const correctedText = checkSpell(spell);
+  const suggestion = findFirstMisspelledWord(inputText);
 
   return (
     <div>
       <h1>Spell Check and Auto-Correction</h1>
-      <textarea rows="6" cols="45" value={spell} onChange={handleChange} />
-      {spell && spell !== correctedText && (
+      <textarea
+        rows="6"
+        cols="45"
+        value={inputText}
+        onChange={handleChange}
+      />
+      {suggestion && (
         <div>
-          Did you mean: <strong>{correctedText}</strong>?
+          Did you mean: <strong>{suggestion.corrected}</strong>?
         </div>
       )}
     </div>
